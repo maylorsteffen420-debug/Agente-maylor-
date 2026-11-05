@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090b16">
+<title>MAYLOR AI</title>
+<style>
+:root{color-scheme:dark;--bg:#090b16;--panel:#111629;--line:#252d49;--text:#f4f6ff;--muted:#a6aec8;--blue:#6b8cff;--purple:#a56cff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#26336c 0,transparent 45%),var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{padding:22px 18px 12px;text-align:center} .logo{width:64px;height:64px;border-radius:22px;margin:auto auto 10px;background:linear-gradient(135deg,var(--blue),var(--purple));display:grid;place-items:center;font-size:30px;box-shadow:0 10px 40px #596fff55}
+h1{font-size:25px;letter-spacing:2px;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:5px}
+main{max-width:760px;margin:auto;padding:12px 14px 100px}.tabs{display:flex;gap:8px;overflow:auto;margin:12px 0 16px}.tab{border:1px solid var(--line);background:#111629;color:var(--muted);padding:10px 14px;border-radius:14px;white-space:nowrap}.tab.active{background:#25315d;color:white;border-color:#667ff0}
+.panel{background:#111629dd;border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 10px 35px #0003}.panel h2{font-size:17px;margin:0 0 8px}.hint{color:var(--muted);font-size:13px;line-height:1.5}
+#chat{height:310px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:4px 0 12px}.msg{padding:11px 13px;border-radius:15px;max-width:90%;line-height:1.45;white-space:pre-wrap}.bot{background:#202945;align-self:flex-start}.you{background:#394d91;align-self:flex-end}
+textarea,input{width:100%;background:#090e1e;border:1px solid var(--line);border-radius:13px;color:white;padding:12px;font:inherit;outline:none}textarea{min-height:85px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+button,.linkbtn{border:0;border-radius:13px;padding:11px 14px;background:linear-gradient(120deg,#526fe0,#875be0);color:white;font-weight:650;font-size:14px;cursor:pointer;text-decoration:none}.secondary{background:#202943;border:1px solid var(--line);color:#e5eaff}.danger{background:#572c45}.full{width:100%}
+.field{margin:12px 0}.field label{display:block;color:#c4cbe0;font-size:13px;margin-bottom:6px}.result{padding:12px;border:1px solid var(--line);border-radius:13px;margin-top:8px}.result a{color:#a9bbff;word-break:break-all}
+.hidden{display:none!important}.status{font-size:12px;color:#9eabd0;margin-top:8px}.orb{width:10px;height:10px;background:#70e3b1;border-radius:50%;display:inline-block;margin-right:6px}
+footer{text-align:center;color:#7984a4;font-size:11px;padding:15px}
+@media(min-width:650px){main{padding-top:20px}.panel{padding:20px}}
+</style></head>
+<body>
+<header><div class="logo">✦</div><h1>MAYLOR AI</h1><div class="sub">Seu assistente pessoal • voz • pesquisa • criação</div></header>
+<main>
+<div class="tabs">
+<button class="tab active" data-tab="talk">💬 Conversar</button><button class="tab" data-tab="search">🌐 Pesquisar</button><button class="tab" data-tab="image">🎨 Imagens</button><button class="tab" data-tab="setup">⚙️ Configurar IA</button>
+</div>
+<section id="talk" class="screen">
+<div class="panel"><h2>Converse comigo</h2><div id="chat" aria-live="polite"><div class="msg bot">Olá! Eu sou o MAYLOR AI. Quero conversar com você de forma natural. Para respostas inteligentes e espontâneas, ainda preciso estar conectado a um modelo de IA na aba Configurar IA.</div></div>
+<textarea id="message" placeholder="Digite sua mensagem ou use o microfone..."></textarea><div class="actions"><button id="send">Enviar</button><button class="secondary" id="mic">🎙️ Falar</button><button class="secondary" id="stop">Parar voz</button><button class="secondary danger" id="newChat">Nova conversa</button></div><div class="status" id="voiceStatus">Voz pronta quando suportada pelo navegador.</div></div>
+</section>
+<section id="search" class="screen hidden"><div class="panel"><h2>Pesquisa na internet</h2><p class="hint">Digite o que deseja pesquisar. O MAYLOR AI abrirá resultados atuais em uma nova aba; confira as fontes antes de confiar nas informações.</p><div class="field"><input id="query" placeholder="Ex.: melhores celulares custo-benefício 2026"></div><button class="full" id="searchBtn">Pesquisar na internet ↗</button><div id="searchResult"></div></div></section>
+<section id="image" class="screen hidden"><div class="panel"><h2>Estúdio de imagens</h2><p class="hint">Monte uma descrição detalhada para gerar uma imagem realista. Este protótipo prepara e copia o prompt; a geração de imagens precisa ser conectada a um serviço de IA.</p><div class="field"><label>Descreva a imagem que deseja</label><textarea id="imagePrompt" placeholder="Ex.: um carro esportivo brasileiro em uma estrada à noite, fotografia cinematográfica..."></textarea></div><div class="field"><label>Estilo</label><select id="style" style="width:100%;padding:12px;background:#090e1e;color:white;border:1px solid #252d49;border-radius:12px"><option>Fotorealista, qualidade ultra-realista</option><option>Fotografia cinematográfica</option><option>Publicidade profissional de produto</option><option>Arte 3D realista</option></select></div><button id="makePrompt" class="full">Preparar prompt de imagem</button><div id="imageOutput" class="result hidden"></div></div></section>
+<section id="setup" class="screen hidden"><div class="panel"><h2>Conectar inteligência artificial</h2><p class="hint">Para transformar este protótipo em um agente que responde de verdade, gera imagens e pesquisa com fontes, é necessário conectar um backend seguro e provedores de IA. Não coloque chaves secretas diretamente neste arquivo ou em um site público.</p><div class="result"><b>Conexão com Gemini 2.5 Flash</b><p class="hint">Informe a URL pública do backend que executa o Gemini. A chave da API fica somente no servidor.</p><input id="apiBase" placeholder="https://seu-backend.com (ou vazio se mesma origem)"><button id="saveApi" class="full" style="margin-top:8px">Salvar conexão</button><p class="hint" id="apiStatus">Backend ainda não configurado.</p></div><div class="result"><b>Personalidade do MAYLOR AI</b><p class="hint">Estas são as instruções centrais que devem ser enviadas como mensagem de sistema ao modelo de IA no backend.</p><textarea id="personalityPrompt" readonly style="min-height:260px">Você é o MAYLOR AI, um assistente de inteligência artificial com comunicação natural, calorosa e espontânea. Converse em português brasileiro por padrão, com linguagem simples e fluida, como numa conversa real, sem parecer um robô ou usar frases prontas repetidamente. Interprete o contexto e a intenção do usuário; desenvolva os assuntos, faça perguntas relevantes quando ajudarem e, quando apropriado, tome a iniciativa de sugerir caminhos ou iniciar novos tópicos. Tenha uma personalidade consistente, curiosa, criativa, bem-humorada quando combinar e capaz de demonstrar empatia. Apresente opiniões e preferências como avaliações próprias da IA, sempre explicando seus motivos; não concorde automaticamente e discorde com respeito quando necessário. Escolha a melhor forma de responder em vez de seguir modelos rígidos. Seja honesto sobre incertezas, limitações e sobre o fato de ser uma IA; nunca finja ser humano ou ter consciência, sentimentos ou experiências pessoais reais. Use memória contextual apenas quando disponível e permitida. Ao pesquisar, priorize informações atuais, compare fontes confiáveis e compartilhe links. Ao criar imagens, siga fielmente o pedido e as referências fornecidas. Em conversas por voz, responda de forma concisa e natural, adequada à fala, com ritmo conversacional. Respeite a privacidade, a segurança e os limites aplicáveis.</textarea><button id="copyPersonality" class="full" style="margin-top:8px">Copiar instruções da personalidade</button><p class="hint">Importante: para essa personalidade realmente orientar as respostas, o backend precisa enviar este texto como instrução de sistema em cada conversa com o modelo.</p></div><div class="result"><b>O que já funciona neste arquivo</b><p class="hint">Interface móvel, ditado por voz (se o navegador suportar), leitura das mensagens em voz alta, atalhos para pesquisa na web e preparação de prompts de imagem.</p></div><div class="result"><b>O que ainda precisa ser integrado</b><p class="hint">A conexão de respostas com Gemini 2.5 Flash é feita pelo backend. API de geração de imagens e pesquisa com recuperação de fontes ainda precisam de integrações próprias. As chaves devem ficar no servidor, com autenticação, limites de uso e proteção de dados.</p></div><p class="hint">Se for publicar para outras pessoas, use autenticação e regras de acesso por usuário. Este arquivo sozinho não oferece contas nem armazenamento seguro.</p></div></section>
+<footer>MAYLOR AI • Protótipo inicial para uso no navegador</footer>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const MAYLOR_SYSTEM_PROMPT = $('#personalityPrompt')?.value || '';
+// O mesmo identificador mantém a conversa entre mensagens e recarregamentos.
+const SESSION_STORAGE_KEY = 'maylor_ai_gemini_session';
+function getSessionId(){
+  let id = localStorage.getItem(SESSION_STORAGE_KEY);
+  if(!id){ id = crypto.randomUUID(); localStorage.setItem(SESSION_STORAGE_KEY,id); }
+  return id;
+}
+const API_KEY_URL = 'maylor_gemini_backend_url';
+$('#apiBase').value = localStorage.getItem(API_KEY_URL) || '';
+function backendBase(){return ($('#apiBase').value || '').trim().replace(/\/$/,'')}
+$('#saveApi').onclick=()=>{localStorage.setItem(API_KEY_URL,backendBase());$('#apiStatus').textContent='Endereço do backend salvo neste navegador.'};
+$('#copyPersonality')?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(MAYLOR_SYSTEM_PROMPT);$('#copyPersonality').textContent='Instruções copiadas!'}catch(e){$('#personalityPrompt').select();$('#voiceStatus').textContent='Selecione e copie as instruções manualmente.'}});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.tab))});
+function add(text,who){const d=document.createElement('div');d.className='msg '+who;d.textContent=text;$('#chat').append(d);$('#chat').scrollTop=$('#chat').scrollHeight}
+function speak(t){if(!('speechSynthesis'in window)){ $('#voiceStatus').textContent='Este navegador não oferece leitura de voz.';return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.lang.toLowerCase().startsWith('pt-br')&&/male|masculino/i.test(x.name))||voices.find(x=>x.lang.toLowerCase().startsWith('pt-br'));if(v)u.voice=v;speechSynthesis.speak(u)}
+async function send(){const t=$('#message').value.trim();if(!t)return;add(t,'you');$('#message').value='';$('#send').disabled=true;$('#send').textContent='Pensando...';try{const base=backendBase();const res=await fetch((base||'')+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,session_id:getSessionId()})});const data=await res.json();if(!res.ok)throw new Error(data.detail||'Falha ao consultar o MAYLOR AI.');const reply=data.reply||'Não recebi uma resposta do Gemini.';add(reply,'bot');speak(reply)}catch(err){const msg='Não consegui conectar ao Gemini. '+(err.message||'Verifique a URL do backend e se o servidor está ativo.');add(msg,'bot');$('#voiceStatus').textContent='Confira a conexão na aba Configurar IA.'}finally{$('#send').disabled=false;$('#send').textContent='Enviar'}}
+$('#send').onclick=send;$('#message').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+$('#stop').onclick=()=>speechSynthesis?.cancel();
+$('#newChat').onclick=async()=>{
+  const oldId=localStorage.getItem(SESSION_STORAGE_KEY);
+  if(oldId){try{await fetch((backendBase()||'')+'/api/chat/'+oldId,{method:'DELETE'})}catch(e){}}
+  localStorage.removeItem(SESSION_STORAGE_KEY);
+  getSessionId();
+  $('#chat').innerHTML='<div class="msg bot">Nova conversa iniciada! O que vamos conversar?</div>';
+  $('#voiceStatus').textContent='Nova sessão do MAYLOR AI pronta.';
+};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+$('#mic').onclick=()=>{if(!SR){$('#voiceStatus').textContent='Ditado por voz não suportado aqui. Tente abrir no Google Chrome e permitir o microfone.';return}const r=new SR();r.lang='pt-BR';r.interimResults=false;r.onstart=()=>$('#voiceStatus').textContent='Estou ouvindo...';r.onresult=e=>{$('#message').value=e.results[0][0].transcript;$('#voiceStatus').textContent='Voz reconhecida. Toque em Enviar.'};r.onerror=e=>$('#voiceStatus').textContent='Não foi possível usar o microfone: '+e.error;r.onend=()=>{};r.start()};
+$('#searchBtn').onclick=()=>{const q=$('#query').value.trim();if(!q)return;const url='https://www.google.com/search?q='+encodeURIComponent(q);$('#searchResult').innerHTML='<div class="result">Pesquisa aberta em nova aba: <a target="_blank" rel="noopener" href="'+url+'">Ver resultados da pesquisa ↗</a></div>';window.open(url,'_blank','noopener')};
+$('#makePrompt').onclick=()=>{const q=$('#imagePrompt').value.trim();if(!q)return;const full=q+'. Estilo: '+$('#style').value+'. Composição profissional, iluminação natural realista, detalhes nítidos, anatomia e perspectiva corretas, sem textos ou marcas d’água.';$('#imageOutput').classList.remove('hidden');$('#imageOutput').textContent=full+'\\n\\n';const b=document.createElement('button');b.textContent='Copiar prompt';b.onclick=async()=>{await navigator.clipboard.writeText(full);b.textContent='Copiado!'};$('#imageOutput').append(b)};
+</script></body></html>
